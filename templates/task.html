@@ -1,0 +1,43 @@
+{% extends "base.html" %}{% block body %}
+<div class="progress">
+  {% for n in range(total) %}<span class="{{ 'on' if n <= i }}"></span>{% endfor
+  %}
+</div>
+<p class="muted">Passage {{ i + 1 }} of {{ total }}</p>
+<h1>
+  {{ "Type normally" if cond == "baseline" else "Type while counting backwards"
+  }}
+</h1>
+<div class="callout {{ 'base' if cond == 'baseline' else '' }}">
+  {{ instruction }}
+</div>
+<div class="target {{ 'dual' if cond == 'dual_task' }}">{{ text }}</div>
+<label for="typing">Your typing</label>
+<textarea
+  id="typing"
+  data-endpoint="/api/block/{{ i }}"
+  spellcheck="false"
+  autocomplete="off"
+  autocorrect="off"
+  placeholder="Click here and start typing"
+></textarea>
+<p class="muted">Corrections with Backspace are fine. Pasting is disabled.</p>
+<button id="finish" class="btn">I have finished typing</button>
+<div id="effort-panel" class="panel" hidden>
+  <h2 style="margin-top: 0">How much mental effort did that take?</h2>
+  <div class="scale">
+    {% for n in range(1, 10) %}<label
+      ><input type="radio" name="effort" value="{{ n }}" />{{ n }}</label
+    >{% endfor %}
+  </div>
+  <div class="ends">
+    <span>Very, very low effort</span><span>Very, very high effort</span>
+  </div>
+  <p style="margin-top: 16px">
+    <button id="send" class="btn">
+      {{ "Continue" if i + 1 < total else "See my result" }}
+    </button>
+  </p>
+</div>
+<script src="{{ url_for('static', filename='capture.js') }}"></script>
+{% endblock %}

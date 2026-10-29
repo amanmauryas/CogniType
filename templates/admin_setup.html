@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% block body %}
+<h1>Create the researcher password</h1>
+<p>
+  This is a one-time step. The first person to open this page sets the password,
+  so do it right after you deploy. After that, this page is closed and only the
+  sign-in page works.
+</p>
+
+{% if error %}
+<p class="err">{{ error }}</p>
+{% endif %}
+<form method="post">
+  <label for="p">Password (at least 10 characters)</label
+  ><input id="p" type="password" name="password" autofocus />
+  <label for="c">Confirm password</label
+  ><input id="c" type="password" name="confirm" />
+  <p style="margin-top: 16px">
+    <button class="btn">Save password and continue</button>
+  </p>
+</form>
+{% endblock %}

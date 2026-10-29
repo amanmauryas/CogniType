@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}CogniType{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <header class="top">
+        <div class="wrap {% block hw %}{% endblock %}"><a href="/">CogniType</a>
+            <span><a class="sub" href="/admin">Researcher area</a>{% if session.get("admin") %} &nbsp; <a class="sub"
+                    href="/admin/logout">Sign out</a>{% endif %}</span>
+        </div>
+    </header>
+    <main class="wrap {% block mw %}{% endblock %}">{% block body %}{% endblock %}</main>
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+{% extends "base.html" %}{% block mw %}wide{% endblock %}{% block hw %}wide{%
+endblock %}{% block body %}
+<div class="verdict {{ level }}">
+  <h1>{{ headline }}</h1>
+  <p>{{ felt }}</p>
+  <p class="muted">
+    What this means: when your mind is busy with a second task, typing is one of
+    the first things to show it. Pace, rhythm and corrections are small signals,
+    and together they hint at how hard your brain was working. Below, each
+    measure is compared between your normal typing and your typing while
+    counting.
+  </p>
+</div>
+<h2 style="margin-top: 0">Measure by measure</h2>
+<div class="cards">
+  {% for c in cards %}
+  <div class="mc">
+    <h3>
+      {{ c.label }}<span class="tag {{ c.state }}"
+        >{{ {'load':'load-like','against':'opposite','same':'no
+        change','neutral':'weak signal'}[c.state] }}</span>
+    </h3>
+    <div class="big">
+      {{ ('%+d%%' % c.pct) if c.pct is not none else 'new' }}
+    </div>
+    <div class="vals">Normal {{ c.base }} &rarr; Counting {{ c.load }}</div>
+    <p>{{ c.meaning }}</p>
+    <p><b>For you:</b> {{ c.note }}</p>
+  </div>
+  {% endfor %}
+</div>
+<div class="panel">
+  <b>Change under the counting task (%)</b><canvas id="c" height="100"></canvas>
+  <p class="muted" style="margin-top: 8px">
+    Purple bars moved in the direction typical of higher load, teal bars moved
+    the other way, grey bars barely changed.
+  </p>
+</div>
+<p class="muted">
+  One short sample from one sitting cannot diagnose anything. Tiredness,
+  keyboard, practice with the passage and how seriously you took the counting
+  all affect the numbers. Your participant code is <b>{{ code }}</b>
+</p>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js">
+
+</script>
+<script>
+  const d = {{ chart|tojson }};
+  new Chart(document.getElementById("c"), {type:"bar",
+   data:{labels:d.labels,datasets:[{data:d.values,backgroundColor:d.colors}]},
+   options:{indexAxis:"y",plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:"%"}}}}});
+</script>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block mw %}wide{% endblock %}{% block hw %}wide{% endblock %}{% block body %}
+<h1>Data collection</h1>
+<p>Share <b>{{ request.host_url }}?study=YOUR_STUDY</b> with participants. For Prolific or MTurk add <b>&amp;pid=&#123;&#123;%PROLIFIC_PID%&#125;&#125;</b> to link responses to their IDs.</p>
+<p><a class="btn" href="/admin/export/features.csv">Download features CSV</a> <a class="btn ghost" href="/admin/export/keystrokes.csv">Download raw keystrokes CSV</a></p>
+<form method="get" style="max-width:280px"><label for="s">Filter by study</label>
+<select id="s" name="study" onchange="this.form.submit()"><option value="">All studies</option>
+{% for s in studies %}<option {{ 'selected' if s == study }}>{{ s }}</option>{% endfor %}</select></form>
+<h2>Condition summary</h2><div class="stats">
+{% for c, s in summary.items() %}<div class="panel"><b>{{ s.n }} blocks</b>{{ c }}<br>
+<span class="muted">Mean effort {{ s.effort }} | mean interval {{ s.iki }} ms | mean pauses {{ s.pauses }}</span></div>{% endfor %}</div>
+<h2>Participants ({{ ps|length }})</h2>
+<table><tr><th>Code</th><th>Study</th><th>External ID</th><th>Touch-typist</th><th>Blocks done</th><th>Started (UTC)</th></tr>
+{% for p in ps %}<tr><td>{{ p.code }}</td><td>{{ p.study }}</td><td>{{ p.external_id }}</td><td>{{ p.touch_typist }}</td>
+<td>{{ p.blocks|length }}/2</td><td>{{ p.consented_at.strftime('%Y-%m-%d %H:%M') }}</td></tr>
+{% else %}<tr><td colspan="6">No participants yet.</td></tr>{% endfor %}</table>{% endblock %}

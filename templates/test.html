@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Task | CogniType</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="card-title mb-4">Motor Execution Task</h2>
+
+                <div class="alert alert-info border-0 border-start border-4 border-info">
+                    <strong>Instructions:</strong> Type the paragraph exactly as it appears below. It contains numbers
+                    and punctuation to capture a complete motor profile.
+                    <div class="fs-5 font-monospace mt-2 bg-white p-3 rounded border">{{ target_text }}</div>
+                </div>
+
+                <div class="mb-3 w-25">
+                    <label class="form-label fw-bold">Pre-Task Fatigue Level (1-10)</label>
+                    <input type="number" id="fatigue" class="form-control" min="1" max="10" value="5">
+                </div>
+
+                <textarea id="typingArea" class="form-control mb-3 font-monospace fs-5" rows="4"
+                    placeholder="Start typing..."></textarea>
+                <button id="submitBtn" class="btn btn-success btn-lg">Complete Session</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const activeKeys = {};
+        const keystrokes = [];
+
+        document.getElementById('typingArea').addEventListener('keydown', (e) => {
+            if (e.repeat) return;
+            activeKeys[e.code] = { key: e.key, press: performance.now() };
+        });
+
+        document.getElementById('typingArea').addEventListener('keyup', (e) => {
+            if (activeKeys[e.code]) {
+                const pressData = activeKeys[e.code];
+                keystrokes.push({
+                    key: pressData.key,
+                    press: pressData.press,
+                    release: performance.now()
+                });
+                delete activeKeys[e.code];
+            }
+        });
+
+        document.getElementById('submitBtn').addEventListener('click', () => {
+            fetch('/submit_session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    fatigue_level: document.getElementById('fatigue').value,
+                    keystrokes: keystrokes
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    window.location.href = data.redirect;
+                });
+        });
+    </script>
+</body>
+
+</html>

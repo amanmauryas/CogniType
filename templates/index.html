@@ -1,0 +1,61 @@
+{% extends "base.html" %}{% block body %}
+<div class="hero">
+  <h1>How does mental effort change the way you type?</h1>
+  <p>
+    A 5-minute study of keystroke rhythm. You get a personal result at the end,
+    and your anonymous data helps research on cognitive load.
+  </p>
+</div>
+<ol class="steps">
+  <li>
+    <b>Type normally</b><span>Copy a short passage at your usual pace.</span>
+  </li>
+  <li>
+    <b>Type under load</b
+    ><span>Copy another passage while counting backwards by 7.</span>
+  </li>
+  <li>
+    <b>See your result</b><span>Compare your rhythm across the two tasks.</span>
+  </li>
+</ol>
+<div class="panel">
+  <h2 style="margin-top: 0">What is recorded</h2>
+  <p>
+    Which keys you press and when (to the millisecond), the text you type, and
+    your answers below. No name, email or IP address is stored. You get a
+    personal result at the end, and you can close this page at any time to
+    withdraw.
+  </p>
+  <form method="post" action="/start">
+    <input type="hidden" name="study" value="{{ study }}" /><input
+      type="hidden"
+      name="ext"
+      value="{{ ext }}"
+    />
+    <label for="tt"
+      >Do you touch-type (type without looking at the keys)?</label
+    >
+    <select id="tt" name="touch_typist" required>
+      <option value="">Choose</option>
+      <option>yes</option>
+      <option>partly</option>
+      <option>no</option>
+    </select>
+    <label for="kb">Keyboard you are using</label>
+    <select id="kb" name="keyboard" required>
+      <option value="">Choose</option>
+      <option>laptop</option>
+      <option>external</option>
+      <option>other</option>
+    </select>
+    <label class="check"
+      ><input type="checkbox" name="consent" required /> I am 18 or older and
+      agree to take part under the conditions above.</label
+    >
+    <p style="margin-top: 18px"><button class="btn">Begin study</button></p>
+  </form>
+</div>
+<p class="muted">
+  Use a physical keyboard on a computer. Phones and tablets are not supported.
+</p>
+{% endblock %}
